@@ -68,7 +68,8 @@ class StockContainer(models.Model):
         self.picking_ids = res
 
     name = fields.Char("Container Ref.", required=True)
-    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected', readonly=False, required=False)
+    date_expected = fields.Date("Date expected", compute='_get_date_expected', inverse='_set_date_expected',
+                                readonly=False, required=False)
     move_ids = fields.One2many("stock.move", "container_id", "Moves",
                                readonly=True, copy=False)
     picking_ids = fields.One2many('stock.picking', compute='_get_picking_ids', string='Pickings', readonly=True)
