@@ -20,7 +20,6 @@
 ##############################################################################
 
 from openerp import models, fields, api, _, exceptions
-from datetime import date
 
 
 class StockContainer(models.Model):
