@@ -29,8 +29,10 @@ class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
 
     account_journal_id = fields.Many2one('account.journal', 'Account Journal', required=True,
-                                          states={'done': [('readonly', True)]},
-                                         default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')]))
+                                         states={'done': [('readonly', True)]},
+                                         default=lambda self: self.env['account.journal'].search([
+                                             ('code', '=', 'APUR')
+                                         ]))
 
     container_ids = fields.Many2many('stock.container',string='Containers', states={'done': [('readonly', True)]},
                                      copy=False, compute='_get_container')
