@@ -24,7 +24,7 @@
 #
 ##############################################################################
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 from openerp import models, fields, api, _, exceptions
 
 
