@@ -25,8 +25,8 @@ from .utils import _get_exporter
 from ..backend import middleware
 from openerp.addons.connector.unit.synchronizer import Exporter
 from ..unit.backend_adapter import GenericAdapter
-from .rma_events import unlink_rma, unlink_rmaproduct, export_rma, export_rmaproduct
-from .invoice_events import unlink_invoice, export_invoice
+from .rma_events import unlink_rmaproduct, export_rma, export_rmaproduct
+from .invoice_events import export_invoice
 
 @middleware
 class PartnerExporter(Exporter):
