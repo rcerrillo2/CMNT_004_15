@@ -19,7 +19,6 @@
 #
 ##############################################################################
 from openerp import models, fields, api
-from datetime import datetime, timedelta
 
 
 class AccountMoveLine(models.Model):
@@ -45,7 +44,7 @@ class AccountMoveLine(models.Model):
                               compute='get_mandate_scheme',
                               search='_mandate_scheme_search')
     pner_vat = fields.Char("CIF/NIF/VAT", related="partner_id.vat",
-                              readonly=True)
+                           readonly=True)
 
 
 class AccountBankingMandate(models.Model):
