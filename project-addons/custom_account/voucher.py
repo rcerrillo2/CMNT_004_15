@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, osv
+from openerp import models, fields, api
 
 
 class AccountVoucherLine(models.Model):
