@@ -210,16 +210,16 @@ def delay_export_partner_write(session, model_name, record_id, vals):
             unlink_partner.delay(session, model_name, record_id, priority=1, eta=60)
 
         elif 'child_ids' in vals:
-                for child in vals['child_ids']:
-                    # 2 is the state when the child is delete from the partner
-                    if 2 in child:
-                        # child estructure is [number, record_id, data] the number indicate
-                        # de status of the object and the second position is the record of the
-                        # object. The third position is the data of the object, if the object
-                        # is created is False, else if the object is creating in this moment
-                        # this position have all the data from the object and the second position
-                        # is null because the object is not created yet
-                        unlink_partner.delay(session, model_name, child[1], priority=2)
+            for child in vals['child_ids']:
+                # 2 is the state when the child is delete from the partner
+                if 2 in child:
+                    # child estructure is [number, record_id, data] the number indicate
+                    # de status of the object and the second position is the record of the
+                    # object. The third position is the data of the object, if the object
+                    # is created is False, else if the object is creating in this moment
+                    # this position have all the data from the object and the second position
+                    # is null because the object is not created yet
+                    unlink_partner.delay(session, model_name, child[1], priority=2)
 
         elif partner.web and (vals.get('is_company', False) or partner.is_company):
             for field in up_fields:
