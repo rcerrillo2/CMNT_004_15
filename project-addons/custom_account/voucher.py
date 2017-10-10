@@ -65,53 +65,66 @@ class AccountVoucher(models.Model):
 
     @api.multi
     def onchange_journal(self, journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None):
-        res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id, date, amount, ttype, company_id, context=None)
+        res = super(AccountVoucher, self).onchange_journal(journal_id, line_ids, tax_id, partner_id,
+                                                           date, amount, ttype, company_id, context=None)
         if not res or not res.get('value'):
             return res
         voucher_line_pool = self.pool.get('account.voucher.line')
         length_cr = len(res['value'].get('line_cr_ids', []))
         length_dr = len(res['value'].get('line_dr_ids', []))
+        res_cr = self.onchange_journal_line_cr(length_cr, res, self.line_cr_ids)
+        res['value']['line_cr_ids'][cont_cr]['amount'] = res_cr['amount']
+        res['value']['line_cr_ids'][cont_cr]['reconcile'] = res_cr['reconcile']
+        voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': res_cr['reconcile'],
+                                                                         'amount': res_cr['amount']})
+        res_dr = self.onchange_journal_line_dr(length_dr, res, self.line_dr_ids)
+        res['value']['line_dr_ids'][cont_dr]['amount'] = res_dr['amount']
+        res['value']['line_dr_ids'][cont_dr]['reconcile'] = res_dr['reconcile']
+        voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': res_dr['reconcile'],
+                                                                         'amount': res_dr['amount']})
+        return res
+
+    @staticmethod
+    def onchange_journal_line_cr(length_cr, res_cr, line_cr_ids):
         cont = 0
-        for voucher_line in self.line_cr_ids:
+        for voucher_line in line_cr_ids:
             res_id = 0
             cont_cr = length_cr / 2 - 1
             while res_id != voucher_line.id:
-                res_id = res['value']['line_cr_ids'][cont][1]
+                res_id = res_cr['value']['line_cr_ids'][cont][1]
                 cont += 1
             cont_cr += cont
-            if 'reconcile' in res['value']['line_cr_ids'][cont_cr] and not voucher_line.reconcile:
+            if 'reconcile' in res_cr['value']['line_cr_ids'][cont_cr] and not voucher_line.reconcile:
                 voucher_line.reconcile = False
                 voucher_line.amount = 0.0
-            elif 'reconcile' not in res['value']['line_cr_ids'][cont_cr] and voucher_line.reconcile:
+            elif 'reconcile' not in res_cr['value']['line_cr_ids'][cont_cr] and voucher_line.reconcile:
                 voucher_line.reconcile = True
                 voucher_line.amount = voucher_line.amount_unreconciled
 
-            res['value']['line_cr_ids'][cont_cr]['amount'] = voucher_line.amount
-            res['value']['line_cr_ids'][cont_cr]['reconcile'] = voucher_line.reconcile
-            voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': voucher_line.reconcile,
-                                                                             'amount': voucher_line.amount})
+            res_cr['amount'] = voucher_line.amount
+            res_cr['reconcile'] = voucher_line.reconcile
+            return res_cr
 
+    @staticmethod
+    def onchange_journal_line_dr(length_dr, res_dr, line_dr_ids):
         cont = 0
-        for voucher_line in self.line_dr_ids:
+        for voucher_line in line_dr_ids:
             res_id = 0
             cont_dr = length_dr / 2 - 1
             while res_id != voucher_line.id:
-                res_id = res['value']['line_dr_ids'][cont][1]
+                res_id = res_dr['value']['line_dr_ids'][cont][1]
                 cont += 1
             cont_dr += cont
-            if 'reconcile' in res['value']['line_dr_ids'][cont_dr] and not voucher_line.reconcile:
+            if 'reconcile' in res_dr['value']['line_dr_ids'][cont_dr] and not voucher_line.reconcile:
                 voucher_line.reconcile = False
                 voucher_line.amount = 0.0
-            elif 'reconcile' not in res['value']['line_dr_ids'][cont_dr] and voucher_line.reconcile:
+            elif 'reconcile' not in res_dr['value']['line_dr_ids'][cont_dr] and voucher_line.reconcile:
                 voucher_line.reconcile = True
                 voucher_line.amount = voucher_line.amount_unreconciled
 
-            res['value']['line_dr_ids'][cont_dr]['amount'] = voucher_line.amount
-            res['value']['line_dr_ids'][cont_dr]['reconcile'] = voucher_line.reconcile
-            voucher_line_pool.write(self._cr, self._uid, [voucher_line.id], {'reconcile': voucher_line.reconcile,
-                                                                             'amount': voucher_line.amount})
-
-        return res
+            res_dr['amount'] = voucher_line.amount
+            res_dr['reconcile'] = voucher_line.reconcile
+            return res_dr
 
     """@api.multi
     def onchange_date(self, date, currency_id, payment_rate_currency_id, amount, company_id, context=None):
