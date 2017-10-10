@@ -19,7 +19,7 @@
 #
 ##############################################################################
 
-from openerp import fields, api, models, _
+from openerp import fields, api, models
 
 class stock_picking(models.Model):
 
