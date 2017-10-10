@@ -20,7 +20,7 @@
 from openerp.osv import fields, osv
 
 
-class product_category(osv.osv):
+class ProductCategory(osv.osv):
     _inherit = "product.category"
     _columns = {
         'property_account_creditor_price_difference_categ': fields.property(
@@ -33,7 +33,7 @@ class product_category(osv.osv):
     }
 
 
-class product_template(osv.osv):
+class ProductTemplate(osv.osv):
     _inherit = "product.template"
     _columns = {
         'property_account_creditor_price_difference': fields.property(
