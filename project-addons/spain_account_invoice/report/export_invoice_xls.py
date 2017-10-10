@@ -369,7 +369,6 @@ try:
             """Compute the amounts in the currency of the invoice
             """
             currency_obj = self.pool.get('res.currency')
-            currency_rate_obj = self.pool.get('res.currency.rate')
             user = self.pool['res.partner'].browse(cr, uid, user_id)
             invoice = self.pool['account.invoice'].browse(cr, uid, invoice_id)
             invoice_currency_id = invoice.currency_id.id
