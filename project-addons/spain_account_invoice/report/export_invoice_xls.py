@@ -18,7 +18,9 @@ class AccountInvoiceExportReportXlsParser(report_sxw.rml_parse):
             objects, data, ids, report_type=report_type)
         invoice_pool = self.pool['account.invoice']
         invoice_type = data['invoice_type']
+        #We get the list of fields that we want in the excel
         wanted_list = invoice_pool._report_xls_fields(self.cr, self.uid, invoice_type, self.context)
+        #Set the data from wizard as local values for later use
         self.invoice_type = data['invoice_type']
         self.country_group = data['country_group']
         self.company_id = data['company_id']
@@ -651,6 +653,8 @@ try:
                             l['tax_amount'] = 0.0
                             l['tax_base'] = 0.0
 
+                        #Check if the actual number is the same as the next number or as the previous number
+                        #and if the tax description match, set the amount total to 0
                         if (length < line_count) and (l['number'] == lines[line_count]['number']):
                             if l['tax_description'] != '21% IVA soportado (operaciones corrientes)':
                                 l['amount_total'] = 0.0
