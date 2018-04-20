@@ -57,6 +57,8 @@ class sale_order(orm.Model):
 
         self.action_button_confirm(cr, uid, ids, context)
 
+        #This check if the order is fully reserved and the order is going to be confirmed
+        #if not, then a pop-up warning appears
         if not order.is_all_reserved and 'confirmed' not in context:
             return {'name': "Sale confirm",
                     'view_mode': 'form',
