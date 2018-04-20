@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-name="autocomplete_google_maps.FieldGooglePlaces">
+        <span t-att-class="'oe_form_field '+widget.widget_class" t-att-style="widget.node.attrs.style">
+            <t t-if="!widget.get('effective_readonly')">
+                <input type="text" 
+                    t-att-barcode_events="widget.options.barcode_events" 
+                    t-att-id="widget.id_for_label" 
+                    t-att-tabindex="widget.node.attrs.tabindex" 
+                    t-att-autofocus="widget.node.attrs.autofocus" 
+                    t-att-placeholder="widget.node.attrs.placeholder" 
+                    t-att-maxlength="widget.field.size"
+                    t-att-autocomplete="widget.password ? 'new-password' : widget.node.attrs.autocomplete"/>
+            </t>
+            <t t-if="widget.get('effective_readonly')">
+                <span class="oe_form_char_content"/>
+            </t>
+        </span>
+    </t>
+    <t t-name="MapPlacesAutomcomplete">
+        <div class="o_map_places_control">
+            <div class="btn_places_control" title="Places">
+                <i class="fa fa-search" aria-hidden="true"/>
+            </div>
+            <div class="pac-card" id="pac-card">
+                <div>
+                    <div id="title" class="text-center">
+                        Places
+                    </div>
+                    <div id="type-selector" class="pac-controls">
+                        <input type="radio" name="type" id="changetype-all" checked="checked"/>
+                        <label for="changetype-all">All</label>
+                        <input type="radio" name="type" id="changetype-establishment"/>
+                        <label for="changetype-establishment">Establishments</label>
+                        <input type="radio" name="type" id="changetype-address"/>
+                        <label for="changetype-address">Addresses</label>
+                        <input type="radio" name="type" id="changetype-geocode"/>
+                        <label for="changetype-geocode">Geocodes</label>
+                    </div>
+                    <div id="strict-bounds-selector" class="pac-controls">
+                        <input type="checkbox" id="use-strict-bounds" value=""/>
+                        <label for="use-strict-bounds">Strict Bounds</label>
+                    </div>
+                </div>
+                <div id="pac-container">
+                    <input id="pac-input" type="text" placeholder="Enter a location"/>
+                    <div id="pac-result" style="display:none;">
+                    </div>
+                    <div id="pac-button" style="display: none;">
+                        <input type="radio" name="company_type" checked="checked" value="person"/>
+                        <label for="radio_company_person">Individual</label>
+                        <input type="radio" name="company_type" value="company"/>
+                        <label for="radio_company_company">Company</label>
+                        <button type="button" class="btn btn-sm btn-primary" id="pac-button-create">Create Partner</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+    <t t-name="MapPacMarkerContent">
+        <div id="infowindow-content">
+            <img src="" width="16" height="16" id="place-icon"/>
+            <span id="place-name" class="title"/>
+            <br/>
+            <span id="place-address"/>
+        </div>
+    </t>
+</templates>

@@ -1,0 +1,504 @@
+openerp.web.MapView = function (instance, local) {
+    'use strict';
+
+    var core = instance.web.core;
+    var View = instance.web.View;
+    var Widget = instance.Widget;
+    var Model = instance.web.Model;
+    var MapViewPlacesAutocomplete = instance.web.MapViewPlacesAutocomplete;
+    var QWeb = instance.web.qweb;
+    var _lt = instance.web._lt;
+    var _t = instance.web._t;
+
+    local.MapView = View.extend({
+        template: 'MapView',
+        className: 'o_map_view',
+        display_name: _lt('Map'),
+        icon: 'fa-map-o',
+        searchable: true,
+        view_type: 'map',
+        init: function (parent, dataset, view_id, options) {
+            this._super.apply(this, arguments);
+            this.markers = [];
+            this.dataset = dataset;
+            this.view_id = view_id;
+            this.options = options;
+            this.map = false;
+            this.marker_cluster = false;
+            this.shown = $.Deferred();
+            this.fields_view = {};
+        },
+        init_gmaps: function () {
+            this.map = new google.maps.Map(this.$el[0], {
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                zoom: 3,
+                minZoom: 3,
+                maxZoom: 20,
+                fullscreenControl: true,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.TOP_CENTER
+                }
+            });
+            this.marker_cluster = new MarkerClusterer(this.map, [], {
+                imagePath: '/web_google_maps/static/src/img/m'
+            });
+            this.on_maps_add_controls();
+            return $.when();
+        },
+        view_loading: function (fields_view) {
+            this._super.apply(this, arguments);
+            this.fields_view = fields_view;
+            this.fields = this.fields_view.fields;
+            this.children_field = this.fields_view.field_parent;
+            this.set_geolocation_fields();
+            this.shown.done(this._do_show_init.bind(this));
+        },
+        _do_show_init: function () {
+            var self = this;
+            this.init_gmaps().then(function () {
+                self.trigger('map_view_loaded', self.fields_view);
+                self.on_load_markers();
+            });
+        },
+        set_geolocation_fields: function () {
+            if (this.fields_view.arch.attrs.lat && this.fields_view.arch.attrs.lng) {
+                this.latitude = this.fields_view.arch.attrs.lat;
+                this.longitude = this.fields_view.arch.attrs.lng;
+                return true;
+            } else {
+                this.do_warn(_t('Error: cannot display locations'), _t('Please define alias name for geolocations fields for map view!'));
+                return false;
+            }
+        },
+        on_load_markers: function () {
+            var self = this;
+            this.load_markers().done(function () {
+                self.map_centered();
+            });
+        },
+        load_markers: function () {
+            var self = this;
+            this.infowindow = new google.maps.InfoWindow();
+            return $.when(this.dataset.read_slice(this.fields_list()).done(function (records) {
+                self.clear_marker_clusterer();
+                if (!records.length) {
+                    self.do_notify(_t('No geolocation is found!'));
+                    return false;
+                }
+                _.each(records, function (record) {
+                    if (record[self.latitude] && record[self.longitude]) {
+                        var latLng = new google.maps.LatLng(record[self.latitude], record[self.longitude]);
+                        self._create_marker(latLng, record);
+                    };
+                });
+            }));
+        },
+        map_centered: function () {
+            var self = this;
+            var context = this.dataset.context;
+            if (context.route_direction) {
+                this.on_init_routes();
+            } else {
+                this._map_centered();
+            }
+        },
+        _map_centered: function () {
+            var self = this;
+            var bounds = new google.maps.LatLngBounds();
+            _.each(this.markers, function (marker) {
+                bounds.extend(marker.getPosition());
+            });
+            this.map.fitBounds(bounds);
+
+            google.maps.event.addListenerOnce(this.map, 'idle', function () {
+                google.maps.event.trigger(self.map, 'resize');
+                if (self.map.getZoom() > 17) self.map.setZoom(17);
+            });
+        },
+        fields_list: function () {
+            var fields = _.keys(this.fields);
+            if (!_(fields).contains(this.children_field)) {
+                fields.push(this.children_field);
+            }
+            return _.filter(fields);
+        },
+        _create_marker: function (lat_lng, record) {
+            var record = record || {'name': 'XY'};
+            var marker = new google.maps.Marker({
+                position: lat_lng,
+                map: this.map,
+                animation: google.maps.Animation.DROP,
+                label: record.name.slice(0, 2)
+            });
+            this.markers.push(marker);
+            this.set_marker(marker, record);
+        },
+        clear_marker_clusterer: function () {
+            this.marker_cluster.clearMarkers();
+            this.markers.length = 0;
+        },
+        set_marker: function (marker, record) {
+            var record = record || false;
+            this.marker_cluster.addMarker(marker);
+            google.maps.event.addListener(marker, 'click', this.marker_infowindow(marker, record));
+        },
+        marker_infowindow: function (marker, record) {
+            if (!Object.keys(record).length) {
+                return;
+            }
+            var self = this;
+            var content = this.marker_infowindow_content(record);
+            return function () {
+                self.infowindow.setContent(content);
+                self.infowindow.open(self.map, marker);
+            }
+        },
+        marker_infowindow_content: function (record) {
+            var self = this;
+            var ignored_fields = ['id', this.latitude, this.longitude];
+            var contents = [];
+            var title = "";
+            _.each(record, function (val, key) {
+                if (val && ignored_fields.indexOf(key) === -1) {
+                    if (key == 'name') {
+                        title += '<h3>' + val + '</h3>';
+                    } else {
+                        if (val instanceof Array && val.length > 0) {
+                            contents.push('<p><strong>' + self.fields[key].string + '</strong> : <span>' + val[1] + '</span></p>');
+                        } else {
+                            contents.push('<p><strong>' + self.fields[key].string + '</strong> : <span>' + val + '</span></p>');
+                        }
+                    }
+                }
+            });
+            var res = '<div>' + title + '<dl>' + contents.join('') + '</dl></div>';
+            return res;
+        },
+        do_show: function () {
+            this.do_push_state({});
+            this.shown.resolve();
+            return this._super.apply(this, arguments);
+        },
+        do_search: function (domain, context, group_by) {
+            var self = this;
+            var _super = this._super;
+            var _args = arguments;
+            this.shown.done(function () {
+                _super.apply(self, _args);
+                self.on_load_markers();
+            });
+        },
+        on_init_routes: function () {
+            this.geocoder = new google.maps.Geocoder;
+            this.directionsDisplay = new google.maps.DirectionsRenderer;
+            this.directionsService = new google.maps.DirectionsService;
+            this.directionsDisplay.setMap(this.map);
+            this.on_calculate_and_display_route();
+        },
+        on_maps_add_controls: function () {
+            var route_mode = this.dataset.context.route_direction ? true : false;
+            var map_layer = new MapControl(this, route_mode);
+            map_layer.setElement($(QWeb.render('MapViewControl', {})));
+            map_layer.start();
+
+            /* The three keys('model', 'method', 'fields') in the object assigned to variable 'options' is a mandatory keys.
+             * The idea is to be able to pass any 'object' that can be created within the map
+             * 
+             * The fields options is divided into three parts:
+             * 1) 'general'
+             *     This configuration is for 'general' fields of the object, fields like name, phone, etc..
+             *     On the right side of each field is an attribute(s) from 'Places autocomplete'
+             * 2) 'geolocation'
+             *     This configuration is for geolocation fields (only 'latitude' and 'longitude')
+             * 3) 'address'
+             *     This configuration is similar to configuration used by 'google_places' widget
+             *  
+             */
+            var options = {
+                'model': 'res.partner',
+                'method': 'create_partner_from_map',
+                'fields': {
+                    'general': {
+                        'name': 'name',
+                        'website': 'website',
+                        'phone': ['international_phone_number', 'formatted_phone_number'],
+                        'is_company': '',
+                    },
+                    'geolocation': {
+                        'latitude': 'partner_latitude',
+                        'longitude': 'partner_longitude'
+                    },
+                    'address': {
+                        'street': ['street_number', 'route', 'vicinity'],
+                        'street2': ['administrative_area_level_3', 'administrative_area_level_4', 'administrative_area_level_5'],
+                        'city': ['locality', 'administrative_area_level_2'],
+                        'zip': 'postal_code',
+                        'state_id': 'administrative_area_level_1',
+                        'country_id': 'country',
+                    }
+                }
+            };
+            var place_autocomplete = new MapViewPlacesAutocomplete.MapPlacesAutocomplete(this, options);
+            place_autocomplete.setElement($(QWeb.render('MapPlacesAutomcomplete', {})));
+            place_autocomplete.start();
+        },
+        on_calculate_and_display_route: function (mode) {
+            var self = this;
+            var context = this.dataset.context;
+            var mode = mode || 'DRIVING';
+            var origin = new google.maps.LatLng(context.origin_latitude, context.origin_longitude);
+            var destination = new google.maps.LatLng(context.destination_latitude, context.destination_longitude);
+            var paths = [{
+                'path': 'origin',
+                'lat_lng': origin
+            }, {
+                'path': 'destination',
+                'lat_lng': destination
+            }];
+            // Append new control button to the map, a control to open the route in a new tab
+            this.add_btn_redirection(paths);
+
+            this.directionsService.route({
+                'origin': origin,
+                'destination': destination,
+                travelMode: google.maps.TravelMode[mode],
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                if (status === 'OK') {
+                    google.maps.event.trigger(self.map, 'resize');
+                    self.directionsDisplay.setDirections(response);
+                    self.get_routes_distance(response.routes[0]);
+                } else if (status === 'ZERO_RESULTS') {
+                    self.on_add_polyline(paths);
+                } else {
+                    window.alert(_t('Directions request failed due to ' + status));
+                }
+            });
+        },
+        get_routes_distance: function (route) {
+            var content = "";
+            for (var i = 0; i < route.legs.length; i++) {
+                content += '<strong>' + route.legs[i].start_address + '</strong> &#8594;';
+                content += ' <strong>' + route.legs[i].end_address + '</strong>';
+                content += '<p>' + route.legs[i].distance.text + '</p>';
+            }
+            this.on_add_routes_window(content);
+        },
+        on_add_routes_window: function (content) {
+            if (this.$route_window == undefined) {
+                this.$route_window = $(QWeb.render('MapViewRoutes', {}));
+                this.map.controls[google.maps.ControlPosition.LEFT_BOTTOM].push(this.$route_window[0]);
+            }
+            this.$route_window.find('span').html(content);
+        },
+        on_add_polyline: function (paths) {
+            var self = this;
+            var context = this.dataset.context;
+            var route_path = _.pluck(paths, 'lat_lng');
+            var polyline = new google.maps.Polyline({
+                path: route_path,
+                geodesic: true,
+                strokeColor: '#3281ff',
+                strokeOpacity: 0.8,
+                strokeWeight: 5,
+                fillColor: '#FF0000',
+                fillOpacity: 0.35,
+                map: this.map
+            });
+            var distance = this.on_compute_distance(route_path[0], route_path[1]);
+            // display routes information
+            var request_reverse = [];
+            _.each(paths, function (path) {
+                request_reverse.push(self._on_reverse_geocoding(path));
+            });
+            $.when.apply($, request_reverse).done(function () {
+                var route = "";
+                _.each(arguments, function (val) {
+                    if (val.hasOwnProperty('origin') || val.hasOwnProperty('destination')) {
+                        if (val.origin != false || val.destination != false) {
+                            route += val.hasOwnProperty('origin') ? "<strong>" + val.origin + "</strong> &#8594; " : "<strong>" + val.destination + "</strong>";
+                        }
+                    }
+                });
+                route += "<p>" + distance + "</p>";
+                self.on_add_routes_window(route);
+            });
+            // resize the map
+            google.maps.event.trigger(this.map, 'resize');
+            var bounds = new google.maps.LatLngBounds();
+            _.each(route_path, function (route) {
+                bounds.extend(route);
+            });
+            this.map.fitBounds(bounds);
+        },
+        on_compute_distance: function (origin, destination) {
+            var distance = google.maps.geometry.spherical.computeDistanceBetween(origin, destination);
+            var to_km = (distance / 1000).toFixed(2) + " km";
+            return to_km;
+        },
+        redirect_to_gmaps_website: function (locations) {
+            var self = this;
+            var url = "https://www.google.com/maps/dir/?api=1";
+            var window_reference = window.open();
+            var requests = [];
+            _.each(locations, function (path) {
+                requests.push(self._on_reverse_geocoding(path));
+            });
+            $.when.apply($, requests).done(function () {
+                var is_success = true;
+                _.each(arguments, function (val) {
+                    if (val.hasOwnProperty('origin') || val.hasOwnProperty('destination')) {
+                        if (val.origin == false || val.destination == false) {
+                            is_success = false;
+                            window.alert(_t('Reverse geocoding is failed!'));
+                            return false;
+                        } else {
+                            url += val.hasOwnProperty('origin') ? "&origin=" + val.origin : "&destination=" + val.destination;
+                        }
+                    }
+                });
+                if (is_success) {
+                    window_reference.location = url;
+                }
+            });
+        },
+        _on_reverse_geocoding: function (location) {
+            var def = $.Deferred();
+            var lat_lng = location['lat_lng'];
+            var path = location['path'];
+            var res = {};
+            this.geocoder.geocode({
+                'location': lat_lng
+            }, function (results, status) {
+                if (status === 'OK') {
+                    res[path] = results[0].formatted_address;
+                } else {
+                    res[path] = false;
+                }
+                def.resolve(res);
+            });
+            return def;
+        },
+        add_btn_redirection: function (locations) {
+            var self = this;
+            if (this.$btn_google_redirection === undefined) {
+                this.$btn_google_redirection = $(QWeb.render('MapRedirectToGoogle', {}));
+                this.map.controls[google.maps.ControlPosition.RIGHT_TOP].push(this.$btn_google_redirection[0]);
+                this.$btn_google_redirection.on('click', function (ev) {
+                    ev.preventDefault();
+                    self.redirect_to_gmaps_website(locations);
+                });
+            }
+        },
+        reload: function () {
+            var self = this;
+            setTimeout(function () {
+                self.on_load_markers();
+            }, 1000);
+            return $.when();
+        }
+    });
+
+    instance.web.map_view.MapControl = Widget.extend({
+        init: function (parent, route) {
+            this._super.apply(this, arguments);
+            this.parent = parent;
+            this.route = route;
+        },
+        events: {
+            'click .btn_map_control': 'on_control_maps',
+            'click p#map_layer': 'on_change_layer',
+            'click p#travel_mode': 'on_change_mode',
+            'mouseleave #o_map_sidenav': 'on_map_sidenav_mouseleave'
+        },
+        _init_controls: function () {
+            this.parent.map.controls[google.maps.ControlPosition.LEFT_TOP].push(this.$el.get(0));
+        },
+        start: function () {
+            if (this.route) {
+                this.$el.find('#o_map_travel_mode').show();
+            }
+            this.parent.shown.done(this.proxy('_init_controls'));
+        },
+        on_control_maps: function (ev) {
+            $(ev.currentTarget).toggleClass('opened');
+            this.$el.find('#o_map_sidenav').toggleClass('opened');
+            if (this.$el.find('#o_map_sidenav').hasClass('opened')) {
+                this.action_sidenav_visibility('show');
+            } else {
+                this.action_sidenav_visibility('hide');
+            }
+        },
+        on_map_sidenav_mouseleave: function () {
+            var self = this;
+            setTimeout(function () {
+                self.action_sidenav_visibility('hide');
+            }, 3000);
+        },
+        action_sidenav_visibility: function (action) {
+            if (action == 'show') {
+                this.$el.find('#o_map_sidenav').css({'width': '150px'}).show();
+                this.$el.find('.fa').removeClass('fa-bars').addClass('fa-angle-double-left');
+            } else {
+                this.$el.find('.btn_map_control').removeClass('opened');
+                this.$el.find('#o_map_sidenav').removeClass('opened').hide();
+                this.$el.find('.fa').removeClass('fa-angle-double-left').addClass('fa-bars');
+            }
+        },
+        on_change_layer: function (ev) {
+            ev.preventDefault();
+            var layer = $(ev.currentTarget).data('layer');
+            if (layer == 'traffic') {
+                this._on_traffic_layer(ev);
+            } else if (layer == 'transit') {
+                this._on_transit_layer(ev);
+            } else if (layer == 'bicycle') {
+                this._on_bicycle_layer(ev);
+            }
+        },
+        on_change_mode: function (ev) {
+            ev.preventDefault();
+            $(ev.currentTarget).siblings().removeClass('active');
+            $(ev.currentTarget).toggleClass('active')
+            var mode = $(ev.currentTarget).data('mode');
+            this.parent.on_calculate_and_display_route(mode);
+        },
+        _on_traffic_layer: function (ev) {
+            $(ev.currentTarget).toggleClass('active');
+            if ($(ev.currentTarget).hasClass('active')) {
+                this.trafficLayer = new google.maps.TrafficLayer();
+                this.trafficLayer.setMap(this.parent.map);
+            } else {
+                this.trafficLayer.setMap(null);
+                this.trafficLayer = undefined;
+            }
+        },
+        _on_transit_layer: function (ev) {
+            $(ev.currentTarget).toggleClass('active');
+            if ($(ev.currentTarget).hasClass('active')) {
+                this.transitLayer = new google.maps.TransitLayer();
+                this.transitLayer.setMap(this.parent.map);
+            } else {
+                this.transitLayer.setMap(null);
+                this.transitLayer = undefined;
+            }
+        },
+        _on_bicycle_layer: function (ev) {
+            $(ev.currentTarget).toggleClass('active');
+            if ($(ev.currentTarget).hasClass('active')) {
+                this.bikeLayer = new google.maps.BicyclingLayer();
+                this.bikeLayer.setMap(this.parent.map);
+            } else {
+                this.bikeLayer.setMap(null);
+                this.bikeLayer = undefined;
+            }
+        }
+    });
+
+    instance.web.views.add('map', 'instance.web.MapView');
+
+    return local.MapView;
+};
