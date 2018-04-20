@@ -35,13 +35,23 @@ class SaleOrder(models.Model):
 
     @api.multi
     def compute_variables(self):
+        """
+        Check the shipping cost of all transporter and services for an order
+        :return a wizard view with data:
+        """
+
+        #We had problems with the wizard if we didn't create an instance of it before return the data
         view_id = self.env['picking.rated.wizard']
         new = view_id.create({})
+
+        #Check the wizard object and unlink it if necesary
         data_list = self.env['picking.rated.wizard.tree']
         content = data_list.search([('order_id', '=', self.id)])
         if content:
             content.unlink()
         for order in self:
+
+            #Search valid transporters for the destination direcition
             shipment_groups = order.env['res.country.group'].search([('shipment', '=', True),
                                                                      ('country_ids', 'in', order.partner_shipping_id.country_id.id)])
             transporter_ids = order.env['transportation.transporter'].search([('country_group_id', 'in', shipment_groups.ids)])
@@ -49,6 +59,8 @@ class SaleOrder(models.Model):
             package_weight = 0.0
             package_pieces = 0
             products_wo_weight = 0
+
+            #Calculate total weight of the order and the number of pieces
             for order_line in order.order_line:
                 if order_line.product_id.weight == 0 and order_line.product_id.type == 'product':
                     products_wo_weight += 1
@@ -58,14 +70,21 @@ class SaleOrder(models.Model):
             num_pieces = int((package_weight / 20) + 1)
             package_weight = str(package_weight).decode("utf-8")
             products_wo_weight = str(products_wo_weight).decode("utf-8")
+
+            #Set warning message if some products doesn't have weights
             if products_wo_weight != '0':
                 products_wo_weight = products_wo_weight +\
                                      " of the product(s) of the order don't have set the weights," +\
                                      " please take the shipping cost as an aproximation"
             new.write({'total_weight': package_weight,
                        'products_wo_weight': products_wo_weight})
+            import ipdb
+            ipdb.set_trace()
             for transporter in transporter_ids:
                 if transporter.name == 'UPS':
+                    #The code works with a dict that have service codes of UPS as keys, this dict is a system parameter
+                    #so if an error happens, you would need to go to system parameters and insert the service code that
+                    #is giving the error
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.ups.api.request'))
                     user_id = order.env['ir.config_parameter'].get_param('user.ups.api.request')
                     password_id = order.env['ir.config_parameter'].get_param('password.ups.api.request')
@@ -254,6 +273,11 @@ class SaleOrder(models.Model):
                         if 'error' in response.url:
                             raise Exception("Could not find information on url '%s'" % response.url)
                         response_data = response.text
+
+                        #SEUR response is a string with a SOAP XML and inside this SOAP, our XML response
+                        #with codification iso not UTF-8, so we need to convert all the data to UTF-8
+                        #and then get the XML response. We make a tree with this response and go through
+                        #the nodes needed and get the data.
                         concept_codes_valids = ['10', '75']
                         if '&gt;' in response.text:
                             response_data = response_data.replace('&gt;', '>')
@@ -288,12 +312,13 @@ class SaleOrder(models.Model):
                             new.write({'data': [(0, 0, rated_status)]})
 
                 elif transporter.name == 'TNT':
+                    #The code works with a dict that have service codes of TNT as keys, this dict is a system parameter
+                    #so if an error happens, you would need to go to system parameters and insert the service code that
+                    #is giving the error
                     service_codes = ast.literal_eval(order.env['ir.config_parameter'].get_param('service.codes.tnt.api.request'))
                     account_number = order.env['ir.config_parameter'].get_param('account.number.tnt.api.request')
                     account_country = order.env['ir.config_parameter'].get_param('account.country.tnt.api.request')
-                    #account_user_test = order.env['ir.config_parameter'].get_param('account.user.test.tnt.api.request')
                     account_user = order.env['ir.config_parameter'].get_param('account.user.tnt.api.request')
-                    #account_password_test = order.env['ir.config_parameter'].get_param('account.password.test.tnt.api.request')
                     account_password = order.env['ir.config_parameter'].get_param('account.password.tnt.api.request')
                     url = order.env['ir.config_parameter'].get_param('url.tnt.api.request')
 
@@ -356,10 +381,12 @@ class SaleOrder(models.Model):
                     if 'error' in response.url:
                         raise Exception("Could not find information on url '%s'" % response.url)
                     response_data = response.text
+
+                    #With TNT, we do the same aproach as SEUR but TNT doesn't send SOAP XML, so we have
+                    #the response directly. We make a tree and we get the value from the nodes.
                     try:
                         shipping_amount = 0.0
                         currency = ''
-                        service_name = ''
                         root = ET.fromstring(response_data)
                         for price_response in root.iterfind('priceResponse'):
                             for rated_services in price_response.iterfind('ratedServices'):
@@ -379,6 +406,9 @@ class SaleOrder(models.Model):
                                         try:
                                             service_name = service_codes[service_code]
                                         except KeyError:
+                                            #We have the service codes as system parameter, so if TNT add new service codes, the
+                                            #code will throw an exception. With this message we will know which service code isn't
+                                            #defined in the system
                                             raise Exception("The service code \"%s\" is not defined in the system." % service_code)
                                         rated_status = {
                                             'currency': currency,
