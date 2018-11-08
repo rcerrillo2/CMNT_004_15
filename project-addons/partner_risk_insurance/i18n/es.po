@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Launchpad (build 15864)\n"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_code_2:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_code_2
 msgid "Insurance Code 2"
 msgstr "Código del seguro 2"
 
@@ -28,54 +28,52 @@ msgid "Invalid XML for View Architecture!"
 msgstr "¡XML inválido para la definición de la vista!"
 
 #. module: partner_risk_insurance
-#: help:res.partner,company_credit_limit:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_company_credit_limit
 msgid "Credit limit granted by the company."
 msgstr "Límite de crédito concedido por la compañía"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_code:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_code
 msgid "Insurance Code"
 msgstr "Código del seguro"
 
 #. module: partner_risk_insurance
-#: field:res.partner,company_credit_limit:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_company_credit_limit
 msgid "Company's Credit Limit"
 msgstr "Límite de crédito de la compañía"
 
 #. module: partner_risk_insurance
-#: help:res.partner,risk_insurance_requested:0
-msgid ""
-"Mark this field if an insurance was requested for the credit of this partner."
-msgstr ""
-"Marque este campo si se ha pedido un seguro para el crédito de esta empresa."
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_risk_insurance_requested
+msgid "Mark this field if an insurance was requested for the credit of this partner."
+msgstr "Marque este campo si se ha pedido un seguro para el crédito de esta empresa."
 
 #. module: partner_risk_insurance
-#: help:res.partner,risk_insurance_coverage_percent:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_risk_insurance_coverage_percent
 msgid "Percentage of the credit covered by the insurance."
 msgstr "Porcentaje de crédito cubierto por el seguro."
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_grant_date:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_grant_date
 msgid "Insurance Grant Date"
 msgstr "Fecha de concesión del seguro"
 
 #. module: partner_risk_insurance
-#: field:res.partner,insurance_credit_limit:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_insurance_credit_limit
 msgid "Insurance's Credit Limit"
 msgstr "Crédito concedido por el seguro"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_requested:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_requested
 msgid "Insurance Requested"
 msgstr "Seguro solicitado"
 
 #. module: partner_risk_insurance
-#: help:res.partner,risk_insurance_grant_date:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_risk_insurance_grant_date
 msgid "Date when the insurance was granted by the insurance company."
 msgstr "Fecha en que se concedió el seguro."
 
 #. module: partner_risk_insurance
-#: help:res.partner,risk_insurance_code_2:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_risk_insurance_code_2
 msgid ""
 "This fields is needed because some risk insurance companies require a "
 "supplementary code for each partner."
@@ -83,29 +81,24 @@ msgstr ""
 "Código suplementario de la empresa asignado por la compañía aseguradora."
 
 #. module: partner_risk_insurance
-#: view:res.partner:0
+#: model:ir.ui.view,arch_db:partner_risk_insurance.view_partner_form_risk_insurance
 msgid "Credit Insurance"
 msgstr "Seguro de riesgo"
 
 #. module: partner_risk_insurance
-#: help:res.partner,risk_insurance_code:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_risk_insurance_code
 msgid ""
 "This fields is used to store the code the risk insurance company assigns to "
 "this partner."
 msgstr "Código que la compañía aseguradora tiene asignado a esta empresa."
 
 #. module: partner_risk_insurance
-#: view:res.partner:0
-msgid "Accounting"
-msgstr "Contabilidad"
-
-#. module: partner_risk_insurance
-#: help:res.partner,insurance_credit_limit:0
+#: model:ir.model.fields,help:partner_risk_insurance.field_res_partner_insurance_credit_limit
 msgid "Credit limit granted by the insurance company."
 msgstr "Crédito concedido por la compañía aseguradora."
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_coverage_percent:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_coverage_percent
 msgid "Insurance's Credit Coverage"
 msgstr "Cobertura de riesgo del seguro"
 
@@ -124,6 +117,6 @@ msgid "Partner Risk Insurance"
 msgstr "Seguro del riesgo de empresas"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_comment:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_comment
 msgid "Comments"
 msgstr "Comentarios"

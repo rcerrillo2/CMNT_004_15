@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Launchpad (build 15864)\n"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_code_2:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_code_2
 msgid "Insurance Code 2"
 msgstr "Código de Segurança 2"
 
@@ -33,12 +33,12 @@ msgid "Credit limit granted by the company."
 msgstr "Limite de crédito concedido pela empresa."
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_code:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_code
 msgid "Insurance Code"
 msgstr "Código de Seguros"
 
 #. module: partner_risk_insurance
-#: field:res.partner,company_credit_limit:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_company_credit_limit
 msgid "Company's Credit Limit"
 msgstr "Limite de Crédito da Empresa"
 
@@ -55,17 +55,17 @@ msgid "Percentage of the credit covered by the insurance."
 msgstr "Percentual do crédito coberto pelo seguro."
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_grant_date:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_grant_date
 msgid "Insurance Grant Date"
 msgstr "Data da Concessão do Seguro"
 
 #. module: partner_risk_insurance
-#: field:res.partner,insurance_credit_limit:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_insurance_credit_limit
 msgid "Insurance's Credit Limit"
 msgstr "Limite do Seguro de Crédito"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_requested:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_requested
 msgid "Insurance Requested"
 msgstr "Seguro Requerido"
 
@@ -84,7 +84,7 @@ msgstr ""
 "reuqer um código complementar para cada terceiro."
 
 #. module: partner_risk_insurance
-#: view:res.partner:0
+#: model:ir.ui.view,arch_db:partner_risk_insurance.view_partner_form_risk_insurance
 msgid "Credit Insurance"
 msgstr "Seguro de Crédito"
 
@@ -98,17 +98,12 @@ msgstr ""
 "risco atribui a este terceiro."
 
 #. module: partner_risk_insurance
-#: view:res.partner:0
-msgid "Accounting"
-msgstr "Contabilidade"
-
-#. module: partner_risk_insurance
 #: help:res.partner,insurance_credit_limit:0
 msgid "Credit limit granted by the insurance company."
 msgstr "Limite de crédito concedido pela companhia de seguros."
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_coverage_percent:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_coverage_percent
 msgid "Insurance's Credit Coverage"
 msgstr "Cobertura do Seguro de Crédito"
 
@@ -127,6 +122,6 @@ msgid "Partner Risk Insurance"
 msgstr "Risco de Seguro de Terceiro"
 
 #. module: partner_risk_insurance
-#: field:res.partner,risk_insurance_comment:0
+#: model:ir.model.fields,field_description:partner_risk_insurance.field_res_partner_risk_insurance_comment
 msgid "Comments"
 msgstr "Comentários"
