@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,7 +18,5 @@
 #
 ##############################################################################
 
-
-from . import risk_advice
-from . import res_partner
+from . import models
 

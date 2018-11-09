@@ -19,18 +19,17 @@
 #
 ##############################################################################
 
-
-
 from openerp import fields, models, api, _
 from datetime import datetime
 from dateutil import relativedelta
+
 
 class RiskAdviceMail(models.Model):
 
     _name = "partner.risk.advice"
 
     days_after= fields.Integer("Days from last invoice")
-    global_ok = fields.Boolean ("Global", default = False, help = "True: all partners but those with specific advices")
+    global_ok = fields.Boolean ("Global", default=False, help = "True: all partners but those with specific advices")
     partner_id = fields.Many2one("res.partner", "Customer")
     template_id = fields.Many2one("email.template", "Template", required = True)
 

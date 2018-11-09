@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,37 +18,43 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
-from openerp.osv import osv
-from openerp.tools.translate import _
+from odoo import fields, models, api
+from odoo.tools.translate import _
 
 WARNING_MESSAGE = [
-                   ('no-message','No Message'),
-                   ('warning','Warning'),
-                   ('block','Blocking Message')
+                   ('no-message', "No Message"),
+                   ('warning', "Warning"),
+                   ('block', "Blocking Message")
                    ]
 
-WARNING_HELP = _('Selecting the "Warning" option will notify user with the message, Selecting "Blocking Message" will throw an exception with the message and block the flow. The Message has to be written in the next field.')
+WARNING_HELP = _("Selecting the 'Warning' option will notify user with the message, "
+                 "Selecting 'Blocking Message' will throw an exception with the message and block the flow. "
+                 "The Message has to be written in the next field.")
 
 
-class res_partner(models.Model):
-    _inherit = "res.partner"
+class ResPartner(models.Model):
+    _inherit = 'res.partner'
 
-    risk_advice_ids = fields.One2many ("partner.risk.advice", "partner_id")
+    risk_advice_ids = fields.One2many('partner.risk.advice', 'partner_id')
     rma_warn = fields.Selection(WARNING_MESSAGE, 'Invoice', help=WARNING_HELP, required=True, default='no-message')
     rma_warn_msg = fields.Text('Message for RMA')
 
 
-class crm_claim(osv.osv):
+class CrmClaim(models.Model):
     _inherit = 'crm.claim'
 
-    def onchange_partner_id(self, cr, uid, ids, part, email=False, context=None):
-        if not part:
+    # def onchange_partner_id(self, cr, uid, ids, part, email=False, context=None):
+    @api.multi
+    @api.onchange('partner_id')
+    def onchange_partner_id(self):
+        import ipdb
+        ipdb.set_trace()
+        if not self.id:
             return {}
         warning = {}
         title = False
         message = False
-        partner = self.pool.get('res.partner').browse(cr, uid, part, context=context)
+        partner = self.pool.get('res.partner').browse([self.id])
         if partner.rma_warn != 'no-message':
             title = _("Warning for %s") % partner.name
             message = partner.rma_warn_msg
@@ -59,7 +64,7 @@ class crm_claim(osv.osv):
             }
             if partner.rma_warn == 'block':
                 return {'value': {'partner_id': False}, 'warning': warning}
-        result = super(crm_claim, self).onchange_partner_id(cr, uid, ids, part, email, context=context)
+        result = super(CrmClaim, self).onchange_partner_id()
 
         if result.get('warning', False):
             warning['title'] = title and title +' & '+ result['warning']['title'] or result['warning']['title']

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -26,13 +25,14 @@
     'description': """Manage Risk Advices by Email""",
     'author': 'Comunitea Servicios Tecnológicos',
     'website': 'www.comunitea.com',
-    "depends": ['base','mail', 'warning'
+    "depends": ['base','mail', 'crm' #, 'warning'
                 ],
     "data": [
-            'views/res_partner_view.xml',
-            'views/partner_risk_advice_mail.xml',
-            'views/risk_advice_view.xml',
-            'data/ir.cron.xml',
-            'security/ir.model.access.csv'],
+            # 'views/res_partner_view.xml',
+            # 'views/partner_risk_advice_mail.xml',
+            # 'views/risk_advice_view.xml',
+            # 'data/ir.cron.xml',
+            # 'security/ir.model.access.csv'
+         ],
     "installable": True
 }
