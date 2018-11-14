@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,24 +18,25 @@
 #
 ##############################################################################
 
-from openerp import models, fields, tools
+from odoo import models, fields, tools, api
 
 
-class commission_report(models.Model):
+class CommissionReport(models.Model):
 
-    _name = "commission.report"
+    _name = 'commission.report'
     _description = "Sale commission report"
     _auto = False
 
-    product_id = fields.Many2one('product.product', 'Product')
-    agent_id = fields.Many2one('res.partner', 'Agent')
-    qty = fields.Float('Quantity')
-    settled = fields.Boolean('Settled')
-    inv_date = fields.Date('Date invoice')
+    product_id = fields.Many2one('product.product', "Product")
+    agent_id = fields.Many2one('res.partner', "Agent")
+    qty = fields.Float("Quantity")
+    settled = fields.Boolean("Settled")
+    inv_date = fields.Date("Date invoice")
 
-    def init(self, cr):
-        tools.drop_view_if_exists(cr, self._table)
-        cr.execute("""CREATE or REPLACE VIEW %s as (
+    @api.model_cr
+    def init(self):
+        tools.drop_view_if_exists(self._cr, self._table)
+        self._cr.execute("""CREATE or REPLACE VIEW %s as (
             SELECT c_line.id,
                 i_line.product_id  AS product_id,
                 c_line.agent  AS agent_id,

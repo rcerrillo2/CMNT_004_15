@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -26,9 +25,10 @@
     'description': """Adds analysis view for sale commissions""",
     'author': 'Pexego',
     'website': 'www.pexego.es',
-    "depends": ['base', 'sale_commission', 'sale_stock_commission'],
-    "data": ['commission_report_view.xml', 'security/ir.model.access.csv',
-             'sale_commission_view.xml', 'settlement_view.xml',
-             'sale_view.xml'],
+    "depends": ['base', 'sale_commission'],
+    "data": ['views/commission_report_view.xml' #, 'security/ir.model.access.csv',
+             #'sale_commission_view.xml', 'settlement_view.xml',
+             #'sale_view.xml'
+            ],
     "installable": True
 }

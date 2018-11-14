@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -19,28 +18,30 @@
 #
 ##############################################################################
 
-from openerp import models, api, fields
+from odoo import models, api, fields
 
 
 class AccountInvoice(models.Model):
 
-    _inherit = "account.invoice"
+    _inherit = 'account.invoice'
 
-    @api.one
+    @api.multi
     @api.depends('invoice_line.agents.agent')
     def _get_agents_str(self):
         agents = self.env["res.partner"]
-        for line in self.invoice_line:
-            for agent_line in line.agents:
-                agents += agent_line.agent
+        for invoice in self:
+            for line in invoice.invoice_line:
+                for agent_line in line.agents:
+                    agents += agent_line.agent
 
-        self.agents_str = u", ".join([x.name for x in agents])
+            invoice.agents_str = u", ".join([x.name for x in agents])
 
-    agents_str = fields.Char("Agents", compute='_get_agents_str',
-                             readonly=True, store=True)
+    agents_str = fields.Char("Agents", compute='_get_agents_str', readonly=True, store=True)
 
     @api.multi
     def unlink(self):
+        import ipdb
+        ipdb.set_trace()
         for invoic in self:
             if invoic.state == 'draft':
                 settlements = self.env['sale.commission.settlement'].search(

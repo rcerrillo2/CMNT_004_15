@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,7 +18,5 @@
 #
 ##############################################################################
 
-from . import commission_report
+from . import models
 from . import wizard
-from . import invoice
-from . import sale

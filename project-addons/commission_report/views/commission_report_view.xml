@@ -1,13 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<openerp>
+<?xml version="1.0"?>
+<odoo>
     <data>
-
-        <record id="view_commssion_report" model="ir.ui.view">
+     <record id="view_commssion_report" model="ir.ui.view">
          <field name="name">commission.report.graph</field>
          <field name="model">commission.report</field>
          <field name="arch" type="xml">
-             <graph string="Commissions Analysis" type="pivot" stacked="True">
+             <graph string="Commissions Analysis">
                  <field name="product_id" type="row"/>
                  <field name="agent_id" type="row"/>
                  <field name="inv_date" type="col"/>
@@ -46,8 +44,9 @@
         <field name="search_view_id" ref="commission_report_filter"/>
     </record>
 
-    <menuitem action="action_commission_report_all" id="menu_action_commission_report_all" parent="sale_commission.menu_sale_commissions_conf" sequence="0"/>
+    <menuitem action="action_commission_report_all" id="menu_action_commission_report_all"
+              parent="sale_commission.menu_sale_commissions_management" sequence="0"/>
 
     </data>
-</openerp>
+</odoo>
 
