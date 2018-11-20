@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_users_form_add_area_ids" model="ir.ui.view">
+            <field name="name">res.users.form.add_area_ids</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="/form/sheet/notebook/page[@name='access_rights']" position="after">
+                    <page string="Areas" name="areas" >
+                        <group string="Work areas" name="work_areas">
+                            <field name="area_ids"/>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
