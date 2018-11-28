@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ###########################################################################
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) 2013 Vauxoo (<http://vauxoo.com>).
@@ -21,33 +20,30 @@
 ################################################################################
 
 
-from openerp.osv import osv
-from openerp import SUPERUSER_ID
+from odoo import models, api, SUPERUSER_ID
 
 
-class mail_compose_message(osv.TransientModel):
+class MailComposeMessage(models.TransientModel):
 
     _inherit = 'mail.compose.message'
 
-    def generate_email_for_composer(self, cr, uid, template_id, res_id, context=None):
+    @api.model
+    def generate_email_for_composer(self, template_id, res_ids, fields=None):
+        values = super(MailComposeMessage, self).generate_email_for_composer(template_id, res_ids, fields=fields)
 
-        values = super(mail_compose_message, self).generate_email_for_composer(cr, uid,
-                                                        template_id, res_id, context=context)
+        email_template_obj = self.env['mail.template']
 
-        email_template_obj = self.pool.get('mail.template')
-
-        email_template = email_template_obj.browse(cr, uid, template_id, context=context)
+        email_template = email_template_obj.browse(template_id)
         if values.get('partner_ids', False) and email_template.add_followers:
             partners_to_notify = set([])
             partner_follower = self.pool.get('mail.followers')
 
-            fol_ids = partner_follower.search(cr, SUPERUSER_ID, [
-                ('res_model', '=', context.get('active_model')),
-                ('res_id', '=', context.get('active_id')),
-            ], context=context)
+            fol_ids = partner_follower.search(SUPERUSER_ID, [
+                ('res_model', '=', self.env.context.get('active_model')),
+                ('res_id', '=', self.env.context.get('active_id')),
+            ], context=self.env.context)
 
-            partners_to_notify |= set(fo.partner_id.id
-                    for fo in partner_follower.browse(cr, SUPERUSER_ID, fol_ids, context=context))
+            partners_to_notify |= set(fo.partner_id.id for fo in partner_follower.browse(SUPERUSER_ID, fol_ids))
 
             partners_followers_notify = values.get('partner_ids', []) + list(partners_to_notify)
             values.update({'partner_ids': list(set(partners_followers_notify))})

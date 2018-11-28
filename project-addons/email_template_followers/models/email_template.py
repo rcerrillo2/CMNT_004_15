@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 ###########################################################################
 #    Module Writen to OpenERP, Open Source Management Solution
 #    Copyright (C) 2013 Vauxoo (<http://vauxoo.com>).
@@ -24,9 +23,9 @@
 from odoo import models, fields
 
 
-class email_template(models.Model):
+class EmailTemplate(models.Model):
 
-    _inherit = "mail.template"
+    _inherit = 'mail.template'
 
-    add_followers = fields.Boolean('Add Followers',
-                                   help='Choice to add followers in template')
+    add_followers = fields.Boolean("Add Followers", help="Choice to add followers in template")
+

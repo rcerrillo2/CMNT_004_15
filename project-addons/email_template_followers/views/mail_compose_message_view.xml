@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<?xml version="1.0"?>
+<odoo>
     <data>
     
         <record model="ir.ui.view" id="email_compose_message_wizard_form_inherit02">
@@ -17,4 +17,4 @@
         </record>
         
     </data>
-</openerp>
+</odoo>

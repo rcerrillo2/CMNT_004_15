@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<?xml version="1.0"?>
+<odoo>
     <data>
-
+    
         <record model="ir.ui.view" id="add_followers_email_template_form">
             <field name="name">add.followers.email.template</field>
             <field name="model">mail.template</field>
@@ -12,6 +12,6 @@
                 </xpath>
             </field>
         </record>
-
+        
     </data>
-</openerp>
+</odoo>
