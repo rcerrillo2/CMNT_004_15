@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea All Rights Reserved
@@ -18,7 +17,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, tools
+from odoo import models, fields, tools
 import odoo.addons.decimal_precision as dp
 
 
@@ -46,7 +45,7 @@ class AccountInvoiceCyC(models.Model):
     invoice_month = fields.Selection(MONTHS, string="Month", readonly=True)
     amount_total = fields.Float('Total', readonly=True,
                                 digits_compute=dp.get_precision('Account'))
-    invoice_state = fields.Selection([('open', 'Open'),('paid', 'Paid')],
+    invoice_state = fields.Selection([('open', 'Open'), ('paid', 'Paid')],
                                      string="Invoice state", readonly=True)
     user_id = fields.Many2one("res.users", "Comercial", readonly=True)
     area_id = fields.Many2one('res.partner.area', 'Area', readonly=True)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2016 Comunitea All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class AccountMoveLine(models.Model):
 
-    _inherit = "account.move.line"
+    _inherit = 'account.move.line'
 
     cyc_notify_date = fields.Date("C&C notify date")
     cyc_limit_date_insolvency = fields.Date("C&C limit date insolvency")
