@@ -31,7 +31,7 @@
     "depends": ['base',
                 'sale',
                 'customer_area',
-                'stock'],
+                'stock',],
     "data": ['security/ir.model.access.csv',
              'wizard/picking_tracking_status_view.xml',
              'views/res_partner_view.xml',
