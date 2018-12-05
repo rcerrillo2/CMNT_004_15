@@ -26,38 +26,38 @@ msgid "August"
 msgstr "Agosto"
 
 #. module: cyc_view
-#: field:account.move.line,cyc_limit_date_insolvency:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_move_line_cyc_limit_date_insolvency
 msgid "C&C limit date insolvency"
 msgstr "Fecha límite C&C insolvencia"
 
 #. module: cyc_view
-#: field:account.move.line,cyc_notify_date:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_move_line_cyc_notify_date
 msgid "C&C notify date"
 msgstr "Fecha notificación C&C"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,cash:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_cash
 msgid "Cash"
 msgstr "Contado"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
-#: field:account.invoice.cyc,country_id:0
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_filter
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_country_id
 msgid "Country"
 msgstr "País"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,credit_covered:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_credit_covered
 msgid "Credit covered"
 msgstr "Crédito cubierto"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,credit_not_covered:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_credit_not_covered
 msgid "Credit not covered"
 msgstr "Crédito no cubierto"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_tree
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_tree
 #: model:ir.actions.act_window,name:cyc_view.action_account_invoice_cyc
 #: model:ir.ui.menu,name:cyc_view.account_invoice_menu_cyc
 msgid "Cyc report"
@@ -74,12 +74,12 @@ msgid "February"
 msgstr "Febrero"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,id:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_id
 msgid "ID"
 msgstr "ID"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,invoice_state:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_invoice_state
 msgid "Invoice state"
 msgstr "Estado factura"
 
@@ -109,13 +109,13 @@ msgid "May"
 msgstr "Mayo"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
-#: field:account.invoice.cyc,invoice_month:0
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_filter
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_invoice_month
 msgid "Month"
 msgstr "Mes"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,not_credit:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_not_credit
 msgid "No credit"
 msgstr "Sin seguro"
 
@@ -140,7 +140,7 @@ msgid "Paid"
 msgstr "Cobrado"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_filter
 msgid "Report"
 msgstr "Informe"
 
@@ -150,18 +150,18 @@ msgid "September"
 msgstr "Septiembre"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_filter
 msgid "State"
 msgstr "Estado"
 
 #. module: cyc_view
-#: field:account.invoice.cyc,amount_total:0
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_amount_total
 msgid "Total"
 msgstr "Total"
 
 #. module: cyc_view
-#: view:account.invoice.cyc:cyc_view.account_invoice_cyc_filter
-#: field:account.invoice.cyc,invoice_year:0
+#: model:ir.ui.view,arch_db:cyc_view.account_invoice_cyc_filter
+#: model:ir.model.fields,field_description:cyc_view.field_account_invoice_cyc_invoice_year
 msgid "Year"
 msgstr "Año"
 
