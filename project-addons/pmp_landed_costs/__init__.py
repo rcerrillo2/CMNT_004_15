@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,6 +18,4 @@
 #
 ##############################################################################
 
-from . import stock_landed_costs
-from . import stock
-from . import product
+from . import models

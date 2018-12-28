@@ -29,7 +29,7 @@
     "depends": ['stock_landed_costs',
                 'stock_account',
                 'transportation'],
-    "data": ['stock_landed_costs_view.xml',
-             'product_view.xml'],
+    "data": ['views/stock_landed_costs_view.xml',
+             'views/product_view.xml'],
     "installable": True
 }
