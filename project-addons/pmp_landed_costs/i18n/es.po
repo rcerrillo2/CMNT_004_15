@@ -22,7 +22,7 @@ msgid "Error!"
 msgstr "¡Error!"
 
 #. module: pmp_landed_costs
-#: field:stock.valuation.adjustment.lines,new_standard_price:0
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_new_standard_price
 msgid "New standard price"
 msgstr "Nuevo precio de coste de quant"
 
@@ -37,7 +37,7 @@ msgid "Product Template"
 msgstr "Plantilla de producto"
 
 #. module: pmp_landed_costs
-#: field:stock.valuation.adjustment.lines,standard_price:0
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_standard_price
 msgid "Standard price"
 msgstr "Precio de coste de quant"
 
@@ -62,8 +62,8 @@ msgid "Stock Valuation Adjustment Lines"
 msgstr "Líneas de ajuste de valorización de existencias"
 
 #. module: pmp_landed_costs
-#: field:product.product,tariff:0
-#: field:stock.valuation.adjustment.lines,tariff:0
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_product_product_tariff
+#: model:ir.model.fields,field_description:pmp_landed_costs.field_stock_valuation_adjustment_lines_tariff
 msgid "Tariff"
 msgstr "Arancel"
 

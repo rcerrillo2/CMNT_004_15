@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -19,9 +18,9 @@
 #
 ##############################################################################
 
-from openerp import models, api, exceptions, _, fields
+from odoo import models, api, exceptions, _, fields
 import odoo.addons.decimal_precision as dp
-from openerp.tools import float_round
+from odoo.tools import float_round
 
 
 class StockLandedCost(models.Model):
@@ -29,23 +28,24 @@ class StockLandedCost(models.Model):
     _inherit = 'stock.landed.cost'
 
     account_journal_id = fields.Many2one('account.journal', 'Account Journal', required=True,
-                                          states={'done': [('readonly', True)]},
+                                         states={'done': [('readonly', True)]},
                                          default=lambda self: self.env['account.journal'].search([('code', '=', 'APUR')]))
 
-    container_ids = fields.Many2many('stock.container',string='Containers', states={'done': [('readonly', True)]},
+    container_ids = fields.Many2many('stock.container', string='Containers', states={'done': [('readonly', True)]},
                                      copy=False, compute='_get_container')
 
-    @api.one
+    @api.multi
     def _get_container(self):
-        move_obj = self.env['stock.move']
-        container_obj = self.env['stock.container']
-        res = []
-        for picking_id in self.picking_ids:
-            move_id = move_obj.search([('picking_id', '=', picking_id.id), ('container_id', '!=', False)], limit=1)
-            container_id = container_obj.browse(move_id.container_id.id)
-            res.append(container_id.id)
+        for cost in self:
+            move_obj = self.env['stock.move']
+            container_obj = self.env['stock.container']
+            res = []
+            for picking_id in cost.picking_ids:
+                move_id = move_obj.search([('picking_id', '=', picking_id.id), ('container_id', '!=', False)], limit=1)
+                container_id = container_obj.browse(move_id.container_id.id)
+                res.append(container_id.id)
 
-        self.container_ids = res
+            cost.container_ids = res
 
     def compute_landed_cost(self, cr, uid, ids, context=None):
         line_obj = self.pool.get('stock.valuation.adjustment.lines')
@@ -138,14 +138,11 @@ class StockLandedCost(models.Model):
                     continue
                 total_cost = 0.0
                 total_qty = move.product_qty
-                weight = move.weight or (move.product_id and \
-                    move.product_id.weight * move.product_qty)
-                volume = move.product_id and move.product_id.volume * \
-                    move.product_qty
+                weight = move.weight or (move.product_id and move.product_id.weight * move.product_qty)
+                volume = move.product_id and move.product_id.volume * move.product_qty
                 for quant in move.quant_ids:
                     total_cost += (quant.cost * quant.qty)
-                tariff = move.product_id and move.product_id.tariff * \
-                    move.product_qty
+                tariff = move.product_id and move.product_id.tariff * move.product_qty
                 vals = dict(product_id=move.product_id.id, move_id=move.id,
                             quantity=move.product_uom_qty,
                             former_cost=total_cost, weight=weight,

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -18,20 +17,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, SUPERUSER_ID
+from odoo import models, api, SUPERUSER_ID
 
-class stock_move(models.Model):
+
+class StockMove(models.Model):
 
     _inherit = 'stock.move'
 
-    def product_price_update_after_done(self, cr, uid, ids, context=None):
-        #res = super(stock_move, self).product_price_update_after_done(cr, uid, ids, context)
-        product_obj = self.pool.get('product.product')
-        for move in self.browse(cr, uid, ids, context=context):
-            if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
-                product_obj.update_real_cost(cr, uid, move.product_id.id, context)
-        #return res
+    # TODO MIGRAR @api.multi
+    # def product_price_update_after_done(self):
+    #     product_obj = self.pool.get('product.product')
+    #     for move in self:
+    #         if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
+    #             product_obj.update_real_cost(move.product_id.id)
 
-    def _store_average_cost_price(self, cr, uid, move, context=None):
-        if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
-            return super(stock_move, self)._store_average_cost_price(cr, uid, move, context=context)
+    # TODO MIGRAR def _store_average_cost_price(self):
+    #     if (self.location_id.usage == 'supplier') and (self.product_id.cost_method == 'real'):
+    #         return super(StockMove, self)._store_average_cost_price()

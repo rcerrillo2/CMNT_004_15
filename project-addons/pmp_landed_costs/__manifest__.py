@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego Sistemas Informáticos All Rights Reserved
@@ -28,6 +27,7 @@
     'website': 'www.pexego.es',
     "depends": ['stock_landed_costs',
                 'stock_account',
+                'purchase_picking',
                 'transportation'],
     "data": ['views/stock_landed_costs_view.xml',
              'views/product_view.xml'],

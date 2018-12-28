@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos S.L.
@@ -19,19 +18,19 @@
 #
 ##############################################################################
 
-from openerp import fields, models, api
+from odoo import fields, models
 
 
 class ProductProduct(models.Model):
 
-    _inherit = "product.product"
+    _inherit = 'product.product'
 
-    tariff = fields.Float('Tariff', digits=(16,2))
+    tariff = fields.Float('Tariff', digits=(16, 2))
 
 
 class ProductTemplate(models.Model):
 
-    _inherit = "product.template"
+    _inherit = 'product.template'
 
     split_method = fields.Selection(selection_add=[('by_tariff',
                                                     'By tariff')])
