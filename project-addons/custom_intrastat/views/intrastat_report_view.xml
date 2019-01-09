@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="intrastat_custom_report" model="ir.ui.view">
             <field name="name">instrastat.tree</field>
@@ -35,4 +35,4 @@
         </template>
 
     </data>
-</openerp>
+</odoo>

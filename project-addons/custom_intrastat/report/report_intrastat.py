@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2014 Pexego All Rights Reserved
@@ -19,16 +18,15 @@
 #
 ##############################################################################
 
-from openerp import models, fields
-from openerp.tools.sql import drop_view_if_exists
+from odoo import models, fields
+from odoo.tools.sql import drop_view_if_exists
 
 
 class report_intrastat(models.Model):
-    _inherit = "report.intrastat"
+    _inherit = 'report.intrastat'
 
     partner_id = fields.Many2one('res.partner', 'Partner')
     country_id = fields.Many2one('res.country', 'Country')
-
 
     def init(self):
         drop_view_if_exists(self._cr, 'report_intrastat')
