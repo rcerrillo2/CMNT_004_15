@@ -16,8 +16,8 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: custom_intrastat
-#: field:report.intrastat,country_id:0
-#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+#: model:ir.model.fields,field_description:custom_intrastat.field_report_intrastat_country_id
+#: model:ir.ui.view,arch_db:custom_intrastat.intrastat_custom_search
 msgid "Country"
 msgstr "País"
 
@@ -27,13 +27,13 @@ msgid "Intrastat report"
 msgstr "Informe Intrastat"
 
 #. module: custom_intrastat
-#: field:report.intrastat,partner_id:0
-#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+#: model:ir.model.fields,field_description:custom_intrastat.field_report_intrastat_partner_id
+#: model:ir.ui.view,arch_db:custom_intrastat.intrastat_custom_search
 msgid "Partner"
 msgstr "Partner"
 
 #. module: custom_intrastat
-#: view:report.intrastat:custom_intrastat.intrastat_custom_search
+#: model:ir.ui.view,arch_db:custom_intrastat.intrastat_custom_search
 msgid "Intrastat code"
 msgstr "Código intrastat"
 
