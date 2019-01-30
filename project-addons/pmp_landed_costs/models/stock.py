@@ -24,13 +24,14 @@ class StockMove(models.Model):
 
     _inherit = 'stock.move'
 
-    # TODO MIGRAR @api.multi
+    # TODO migrar stock_custom (update_real_cost)
+    # @api.multi
     # def product_price_update_after_done(self):
     #     product_obj = self.pool.get('product.product')
     #     for move in self:
     #         if (move.location_id.usage == 'supplier') and (move.product_id.cost_method == 'real'):
     #             product_obj.update_real_cost(move.product_id.id)
-
-    # TODO MIGRAR def _store_average_cost_price(self):
+    #
+    # def _store_average_cost_price(self):
     #     if (self.location_id.usage == 'supplier') and (self.product_id.cost_method == 'real'):
     #         return super(StockMove, self)._store_average_cost_price()
