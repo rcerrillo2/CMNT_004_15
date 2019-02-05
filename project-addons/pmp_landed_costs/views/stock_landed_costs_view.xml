@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
-        <!--record id="stock_landed_cost_add_standard_price" model="ir.ui.view">
+        <record id="stock_landed_cost_add_standard_price" model="ir.ui.view">
             <field name="name">stock.landed.cost.form</field>
             <field name="model">stock.landed.cost</field>
             <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
@@ -33,7 +32,6 @@
                     <field name="container_ids"  widget="many2many_tags" domain="[('state', '=', 'done')]"/>
                 </field>
             </field>
-        </record-->
-
+        </record>
     </data>
 </odoo>
