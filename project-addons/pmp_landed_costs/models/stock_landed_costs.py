@@ -155,6 +155,7 @@ class StockValuationAdjustmentLines(models.Model):
 
     @api.multi
     def write(self, vals):
+        # FIXME: arreglar esto para que funcione con la nueva estructura de stock.move.line
         if vals.get('additional_landed_cost', False):
             vals['standard_price'] = \
                 sum(self.move_id.mapped('quant_ids.inventory_value')) / \
