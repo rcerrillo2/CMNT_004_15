@@ -423,42 +423,6 @@ class AccountInvoice(models.Model):
                 line.write({'cost_unit': line.product_id.standard_price})
         return res
 
-    @api.multi
-    def invoice_validate(self):
-        res = super(AccountInvoice, self).invoice_validate()
-        for inv in self:
-            if inv.amount_total == 0:
-                import ipdb
-                ipdb.set_trace()
-                obj_voucher = self.env['account.voucher']
-                vals = {
-                    'payment_expected_currency': inv.currency_id.id,
-                    'default_partner_id': self.pool.get('res.partner')._find_accounting_partner(inv.partner_id).id,
-                    'default_amount': inv.type in ('out_refund', 'in_refund') and -inv.residual or inv.residual,
-                    'default_reference': inv.name,
-                    'close_after_process': True,
-                    'invoice_type': inv.type,
-                    'invoice_id': inv.id,
-                    'default_type': inv.type in ('out_invoice','out_refund') and 'receipt' or 'payment',
-                    'type': inv.type in ('out_invoice','out_refund') and 'receipt' or 'payment',
-
-                    'account_id': 145
-                    }
-
-                journal_id = 143
-                # vals = obj_voucher.onchange_journal(journal_id = 143, line_ids=False, tax_id=False, partner_id=False, time.strftime('%Y-%m-%d'), amount=0.0, ttype=False, company_id=False, context=None)
-                voucher = obj_voucher.create(vals)
-                voucher.proforma_voucher()
-                # inv.invoice_pay_customer()
-                # voucher = obj_voucher.browse(23303)
-
-                # inv.invoice_pay_customer()
-                # obj_voucher.onchange_journal()
-                # obj_voucher.signal_workflow('proforma_voucher')
-                inv.confirm_paid()
-
-        return res
-
     @api.model
     def _get_first_invoice_fields(self, invoice):
         res = super(AccountInvoice, self)._get_first_invoice_fields(invoice)
