@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,42 +18,45 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class SaleOrder(models.Model):
 
-    _inherit = "sale.order"
+    _inherit = 'sale.order'
 
     tests = fields.Boolean("Tests", copy=False, readonly=True)
 
-    @api.one
+    @api.multi
     def set_tests(self):
-        self.tests = True
-        for pick in self.picking_ids:
-            pick.tests = True
-            for move in pick.move_lines:
-                move.tests = True
-                if move.procurement_id:
-                    move.procurement_id.tests = True
+        for sale in self:
+            sale.tests = True
+            for pick in sale.picking_ids:
+                pick.tests = True
+                for move in pick.move_lines:
+                    move.tests = True
+                    if move.procurement_id:
+                        move.procurement_id.tests = True
 
         return True
 
-    @api.one
+    @api.multi
     def unset_tests(self):
-        self.tests = False
-        for pick in self.picking_ids:
-            pick.tests = False
-            for move in pick.move_lines:
-                move.tests = False
-                if move.procurement_id:
-                    move.procurement_id.tests = False
+        for sale in self:
+            sale.tests = False
+            for pick in sale.picking_ids:
+                pick.tests = False
+                for move in pick.move_lines:
+                    move.tests = False
+                    if move.procurement_id:
+                        move.procurement_id.tests = False
 
         return True
 
-    @api.model
-    def _prepare_order_line_procurement(self, order, line, group_id=False):
-        vals = super(SaleOrder, self).\
-            _prepare_order_line_procurement(order, line, group_id=group_id)
-        vals["tests"] = order.tests
-        return vals
+    # TODO: Migrar
+    # @api.model
+    # def _prepare_order_line_procurement(self, order, line, group_id=False):
+    #     vals = super(SaleOrder, self).\
+    #         _prepare_order_line_procurement(order, line, group_id=group_id)
+    #     vals["tests"] = order.tests
+    #     return vals

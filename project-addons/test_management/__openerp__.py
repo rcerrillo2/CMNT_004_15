@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -21,15 +20,15 @@
 
 {
     'name': 'Tests management',
-    'version': '1.0',
+    'version': '11.0',
     'category': 'Accounting',
     'description': """""",
     'author': 'Comunitea',
     'website': 'www.comunitea.com',
     "depends": ['sale', 'account', 'sale_stock', 'stock_account', 'auth_crypt'],
     "data": ['security/test_management_security.xml',
-             #TODO: Migrate 'wizard/stock_invoice_onshipping_test_view.xml',
-             'views/procurement_view.xml',
+             'wizard/stock_invoice_onshipping_test_view.xml',
+             # 'views/procurement_view.xml',
              'views/stock_view.xml',
              'views/sale_view.xml',
              'views/company_view.xml'],

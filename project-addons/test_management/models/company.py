@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from odoo import models, fields
 
 
 class ResCompany(models.Model):
 
-    _inherit = "res.company"
+    _inherit = 'res.company'
 
     test_company_id = fields.Many2one("res.company", "Tests company",
                                       context={'user_preference': False})

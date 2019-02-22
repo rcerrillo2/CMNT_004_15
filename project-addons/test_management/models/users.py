@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,20 +18,20 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, exceptions, _, SUPERUSER_ID
+from odoo import models, fields, api, exceptions, _, SUPERUSER_ID
 
 
 class ResUsers(models.Model):
 
-    _inherit = "res.users"
+    _inherit = 'res.users'
 
-    @api.one
     @api.depends('password')
     def _get_test_password(self):
-        if self.password:
-            self.test_password = self.password + u"#pruebas"
-        else:
-            self.test_password = False
+        for user in self:
+            if user.password:
+                user.test_password = user.password + u"#pruebas"
+            else:
+                user.test_password = False
 
     test_password = fields.Char(compute=_get_test_password, readonly=True,
                                 string="Test Password", store=True)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class StockMove(models.Model):
 
-    _inherit = "stock.move"
+    _inherit = 'stock.move'
 
     tests = fields.Boolean("Tests", readonly=True)
 
@@ -34,15 +33,16 @@ class StockMove(models.Model):
         vals['tests'] = move.tests
         return vals
 
-    @api.model
-    def _prepare_procurement_from_move(self, move):
-        vals = super(StockMove, self)._prepare_procurement_from_move(move)
-        vals['tests'] = move.tests
-        return vals
+    # TODO: Migrar
+    # @api.model
+    # def _prepare_procurement_from_move(self, move):
+    #     vals = super(StockMove, self)._prepare_procurement_from_move(move)
+    #     vals['tests'] = move.tests
+    #     return vals
 
 
 class StockPicking(models.Model):
 
-    _inherit = "stock.picking"
+    _inherit = 'stock.picking'
 
     tests = fields.Boolean("Tests", readonly=True)

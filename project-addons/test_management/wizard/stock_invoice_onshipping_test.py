@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,7 +18,7 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _, exceptions
+from odoo import models, fields, api, _, exceptions
 
 JOURNAL_TYPE_MAP = {
     ('outgoing', 'customer'): ['sale'],
@@ -63,7 +62,7 @@ class StockInvoiceOnShippingTests(models.TransientModel):
 
         return res
 
-    _name = "stock.invoice.onshipping.test"
+    _name = 'stock.invoice.onshipping.test'
     _description = "Stock Invoice Onshipping Test"
 
     journal_id = fields.Selection(_get_journal_ids,

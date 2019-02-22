@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: test_management
-#: view:stock.invoice.onshipping.test:test_management.view_stock_invoice_onshipping_test
+#: model:ir.ui.view,arch_db:test_management.view_stock_invoice_onshipping_test
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -26,12 +26,12 @@ msgid "Companies"
 msgstr "Compañías"
 
 #. module: test_management
-#: view:stock.invoice.onshipping.test:test_management.view_stock_invoice_onshipping_test
+#: model:ir.ui.view,arch_db:test_management.view_stock_invoice_onshipping_test
 msgid "Create"
 msgstr "Crear"
 
 #. module: test_management
-#: view:stock.picking:test_management.view_picking_form_add_tests
+#: model:ir.ui.view,arch_db:test_management.view_picking_form_add_tests
 msgid "Create Invoice"
 msgstr "Crear factura"
 
@@ -41,47 +41,47 @@ msgid "Create Test Invoices"
 msgstr "Crear facturas Pruebas"
 
 #. module: test_management
-#: view:stock.invoice.onshipping.test:test_management.view_stock_invoice_onshipping_test
+#: model:ir.ui.view,arch_db:test_management.view_stock_invoice_onshipping_test
 msgid "Create invoice"
 msgstr "Crear factura"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,create_uid:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,create_date:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_create_date
 msgid "Created on"
 msgstr "Creado el"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,journal_id:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_journal_id
 msgid "Destination Journal"
 msgstr "Diario destino"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,group:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_group
 msgid "Group by partner"
 msgstr "Agrupar por empresa"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,id:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_id
 msgid "ID"
 msgstr "ID"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,invoice_date:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_invoice_date
 msgid "Invoice Date"
 msgstr "Fecha factura"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,write_uid:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_write_uid
 msgid "Last Updated by"
 msgstr "Últ. actualización por"
 
 #. module: test_management
-#: field:stock.invoice.onshipping.test,write_date:0
+#: model:ir.model.fields,field_description:test_management.field_stock_invoice_onshipping_test_write_date
 msgid "Last Updated on"
 msgstr "Últ. actualización el"
 
@@ -131,7 +131,7 @@ msgid "Sales Order"
 msgstr "Pedido de venta"
 
 #. module: test_management
-#: view:sale.order:test_management.view_order_form_add_tests
+#: model:ir.ui.view,arch_db:test_management.view_order_form_add_tests
 msgid "Set"
 msgstr "Marcar"
 
@@ -156,29 +156,29 @@ msgid "Test Manager"
 msgstr "Gestor pruebas"
 
 #. module: test_management
-#: field:procurement.order,tests:0
-#: field:sale.order,tests:0
-#: field:stock.move,tests:0
-#: field:stock.picking,tests:0
+#: model:ir.model.fields,field_description:test_management.field_procurement_order_tests
+#: model:ir.model.fields,field_description:test_management.field_sale_order_tests
+#: model:ir.model.fields,field_description:test_management.field_stock_move_tests
+#: model:ir.model.fields,field_description:test_management.field_stock_picking_tests
 msgid "Tests"
 msgstr "Pruebas"
 
 #. module: test_management
-#: field:res.company,test_company_id:0
+#: model:ir.model.fields,field_description:test_management.field_res_company_test_company_id
 msgid "Tests company"
 msgstr "Compañía pruebas"
 
 #. module: test_management
-#: view:stock.picking:test_management.view_picking_internal_search_inherit_add_tests
+#: model:ir.ui.view,arch_db:test_management.view_picking_internal_search_inherit_add_tests
 msgid "To Invoice Tests"
 msgstr "Pruebas a facturar"
 
 #. module: test_management
-#: view:sale.order:test_management.view_order_form_add_tests
+#: model:ir.ui.view,arch_db:test_management.view_order_form_add_tests
 msgid "Unset"
 msgstr "Desmarcar"
 
 #. module: test_management
-#: view:stock.invoice.onshipping.test:test_management.view_stock_invoice_onshipping_test
+#: model:ir.ui.view,arch_db:test_management.view_stock_invoice_onshipping_test
 msgid "or"
 msgstr "o"

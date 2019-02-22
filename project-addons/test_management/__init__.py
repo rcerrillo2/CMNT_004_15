@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,5 +18,5 @@
 #
 ##############################################################################
 from . import models
-#TODO: MIgrar from . import wizard
+from . import wizard
 

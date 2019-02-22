@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api
+from odoo import models, fields, api
 
 
 class ProcurementOrder(models.Model):
 
-    _inherit = "procurement.order"
+    _inherit = 'procurement.order'
 
     tests = fields.Boolean("Tests", readonly=True)
 

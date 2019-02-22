@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    Copyright (C) 2015 Comunitea Servicios Tecnológicos All Rights Reserved
@@ -19,12 +18,12 @@
 #
 ##############################################################################
 
-from openerp import models, api, exceptions, _
+from odoo import models, api, exceptions, _
 
 
 class StockInvoiceOnShipping(models.TransientModel):
 
-    _inherit = "stock.invoice.onshipping"
+    _inherit = 'stock.invoice.onshipping'
 
     @api.multi
     def create_invoice(self):
