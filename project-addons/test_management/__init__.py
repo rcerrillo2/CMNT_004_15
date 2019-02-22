@@ -18,10 +18,6 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from . import stock
-#TODO: MIgrar from . import procurement
-from . import sale
+from . import models
 #TODO: MIgrar from . import wizard
-from . import company
-from . import users
+

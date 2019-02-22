@@ -29,9 +29,9 @@
     "depends": ['sale', 'account', 'sale_stock', 'stock_account', 'auth_crypt'],
     "data": ['security/test_management_security.xml',
              #TODO: Migrate 'wizard/stock_invoice_onshipping_test_view.xml',
-             'procurement_view.xml',
-             'stock_view.xml',
-             'sale_view.xml',
-             'company_view.xml'],
+             'views/procurement_view.xml',
+             'views/stock_view.xml',
+             'views/sale_view.xml',
+             'views/company_view.xml'],
     "installable": True
 }
