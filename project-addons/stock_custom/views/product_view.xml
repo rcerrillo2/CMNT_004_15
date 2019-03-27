@@ -86,10 +86,10 @@
         <field name="type">ir.actions.server</field>
         <field name="model_id" ref="model_product_product"/>
         <field name="code">
-            action = self.get_stock_new(cr, uid, context.get('active_ids', []), context=context)
+                 action = model.get_stock_new()
         </field>
     </record>
 
     <menuitem id="menu_products_stock_new" action="action_product_stock_new"
-        parent="sale.menu_product" groups="base.group_no_one" sequence="2"/>
+        parent="sale.product_menu_catalog" groups="base.group_no_one" sequence="2"/>
 </odoo>
