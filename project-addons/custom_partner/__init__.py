@@ -22,3 +22,4 @@
 from . import partner
 from . import stock
 from . import rappel
+# from . import prueba_2
